@@ -9,6 +9,7 @@ venv/
 ENV/
 env/
 
+.env
 # IDEs (PyCharm, VSCode)
 .idea/
 .vscode/
