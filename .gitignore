@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs (PyCharm, VSCode)
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model files (Opsional - jika tidak ingin upload model besar ke Git)
+# *.pkl
+# *.keras
+# *.h5

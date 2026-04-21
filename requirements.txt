@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-multipart
+easyocr
+pdf2image
+numpy
+langchain-core
+langchain-community
+langchain-openai
