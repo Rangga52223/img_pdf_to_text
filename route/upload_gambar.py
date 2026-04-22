@@ -5,6 +5,7 @@ from tools.main_tools import read_document
 from base_response import succes_response, error_response
 from logger import app_logger
 from route import uploads
+import asyncio
 import numpy as np
 import cv2
 
@@ -36,15 +37,23 @@ async def uploads_ocr_gambar(file: UploadFile = File(...)):
 @uploads.post("/")
 async def uploads_all_route(file: UploadFile = File(...)):
     try:
-        app_logger.info("Masuk Service")
+        app_logger.info(f"Menerima file: {file.filename} dengan tipe: {file.content_type}")
         file_bytes = await file.read()
+        
         if file.content_type == "application/pdf":
-            return main_service_img_process_pdf(file_bytes)
-        elif file.content_type in ["image/jpeg", "image/png"]:
-            return main_service_ocr_process_img(file_bytes)
+            # 1. LEMPAR PROSES BERAT KE THREAD
+            result = await asyncio.to_thread(main_service_img_process_pdf, file_bytes)
+            return result
+            
+        elif file.content_type in ["image/jpeg", "image/png", "image/jpg"]: # Tambahkan image/jpg untuk jaga-jaga
+            # 2. LEMPAR PROSES BERAT KE THREAD
+            result = await asyncio.to_thread(main_service_ocr_process_img, file_bytes)
+            return result
+            
         else:
             return error_response(message="Format file tidak didukung. Gunakan PDF, JPG, atau PNG.")
+            
     except Exception as e:
-        app_logger.critical(f"Error:{e}")
-        return error_response(f"Error:{e}")
+        app_logger.critical(f"Error di endpoint uploads: {e}")
+        return error_response(message=f"Terjadi kesalahan internal server. Detail: {e}")
         

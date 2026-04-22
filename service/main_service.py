@@ -1,4 +1,4 @@
-from tools.main_tools import read_document, llm_reader
+from tools.main_tools import read_document, llm_reader, pdf_converter
 from pdf2image import convert_from_bytes
 from base_response import succes_response, error_response
 from logger import app_logger
@@ -18,8 +18,9 @@ def ocr_process(docs):
 def main_service_img_process_pdf(docs):
     try:
         app_logger.info("data_masuk_pdf")
-        images = convert_from_bytes(docs, dpi=200)
+        images = pdf_converter(docs)
         raw_data = [{f"halaman_{i+1}": read_document(np.array(img))} for i, img in enumerate(images)]
+        app_logger.info(raw_data)
         clean_info = llm_reader(raw_data)
         return succes_response(data=clean_info)
     except Exception as e:
@@ -31,6 +32,7 @@ def main_service_ocr_process_img(docs):
     try:
         app_logger.info("data_masuk_img")
         raw_data = read_document(docs)
+        app_logger.info(raw_data)
         clean_info = llm_reader(raw_data)
         return succes_response(data=clean_info)
     except Exception as e:

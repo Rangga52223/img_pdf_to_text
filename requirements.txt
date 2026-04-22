@@ -2,7 +2,7 @@ fastapi
 uvicorn
 python-multipart
 easyocr
-pdf2image
+PyMuPDF
 numpy
 langchain-core
 langchain-community

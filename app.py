@@ -2,6 +2,8 @@ import uvicorn # Tambahkan import ini di atas
 from fastapi import FastAPI
 from route.test_route import test
 from route.upload_gambar import uploads
+from middleware.checking_files import LimitUploadSizeMiddleware
+MAX_LIMIT = 10 * 1024 * 1024
 # from app.route.ai_route import ai
 
 app = FastAPI(
@@ -12,7 +14,7 @@ app = FastAPI(
     docs_url=None,         
     redoc_url=None         
 )
-
+app.add_middleware(LimitUploadSizeMiddleware, max_upload_size=MAX_LIMIT)
 app.include_router(test)
 app.include_router(uploads)
 if __name__ == "__main__":
